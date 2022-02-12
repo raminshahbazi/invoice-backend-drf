@@ -5,7 +5,7 @@ from django.db import models
 
 class Item(models.Model):
     name = models.CharField(max_length=256, null=False, default="")
-    discount = models.IntegerField(null=True)
+    discount = models.IntegerField()
     base_price = models.IntegerField()
     final_price = models.IntegerField()
     manufacturing_country = models.CharField(max_length=128, null=True)

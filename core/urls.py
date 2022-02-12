@@ -1,6 +1,7 @@
-from django.urls import path
-from core.views import ItemListAPIView
+from core.views import ItemViewSet
+from rest_framework import routers
 
-urlpatterns = [
-    path('items-list', ItemListAPIView.as_view(), name='items-list')
-]
+router = routers.SimpleRouter()
+router.register(r'items', ItemViewSet, basename='items')
+
+urlpatterns = [] + router.urls
