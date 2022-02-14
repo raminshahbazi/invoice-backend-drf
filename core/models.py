@@ -6,9 +6,27 @@ from datetime import datetime
 # Create your models here.
 
 
+class Item(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=256, null=False, default="")
+    discount = models.IntegerField()
+    base_price = models.IntegerField()
+    final_price = models.IntegerField()
+    manufacturing_country = models.CharField(max_length=128, null=True)
+
+    def __str__(self):
+        return f"{self.name} -" \
+               f" {self.discount} -" \
+               f" {self.base_price} -" \
+               f" {self.final_price} -" \
+               f" {self.final_price} -" \
+               f" {self.manufacturing_country} "
+
+
 class Invoice(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     date = models.DateField(null=False, default=datetime.now)
+    items = models.ManyToManyField(Item)
 
     class YearInSchool(models.TextChoices):
         TYPE1 = 'T1', _('Type 1')
@@ -26,27 +44,5 @@ class Invoice(models.Model):
         return f"{self.user} - {self.type} - {self.description}"
 
 
-class Item(models.Model):
-    name = models.CharField(max_length=256, null=False, default="")
-    discount = models.IntegerField()
-    base_price = models.IntegerField()
-    final_price = models.IntegerField()
-    manufacturing_country = models.CharField(max_length=128, null=True)
 
-    def __str__(self):
-        return f"{self.name} -" \
-               f" {self.discount} -" \
-               f" {self.base_price} -" \
-               f" {self.final_price} -" \
-               f" {self.final_price} -" \
-               f" {self.manufacturing_country} "
-
-
-class InvoiceItem(models.Model):
-    invoice = models.ForeignKey(to=Invoice, related_name='invoice_items', on_delete=models.CASCADE)
-    item = models.ForeignKey(to=Item, on_delete=models.CASCADE)
-    registration_date = models.DateField(null=False, default=datetime.now)
-
-    def __str__(self):
-        return str(self.item)
 
