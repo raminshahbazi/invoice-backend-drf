@@ -11,12 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
-
-    def get_user(self, item):
-        qs = User.objects.filter(item=item)
-        serializer = UserSerializer(instance=qs, many=True)
-        return serializer.data
+    user = UserSerializer()
 
     class Meta:
         model = Item
@@ -25,6 +20,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
 class InvoiceSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    items = ItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Invoice

@@ -3,8 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
 
-# Create your models here.
-
 
 class Item(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
@@ -42,7 +40,3 @@ class Invoice(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.type} - {self.description}"
-
-
-
-
