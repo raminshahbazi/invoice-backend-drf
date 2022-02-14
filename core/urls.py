@@ -9,5 +9,6 @@ router.register(r'items', ItemViewSet, basename='items')
 router.register(r'invoices', InvoiceViewSet, basename='invoices')
 
 urlpatterns = [
-    path("login/", obtain_auth_token, name="obtain-auth-token")
+    path("login/", obtain_auth_token, name="obtain-auth-token"),
+    # path("test/", Test.as_view({'get': 'list'}), name="test")
 ] + router.urls
