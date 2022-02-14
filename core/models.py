@@ -34,14 +34,19 @@ class Item(models.Model):
     manufacturing_country = models.CharField(max_length=128, null=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} -" \
+               f" {self.discount} -" \
+               f" {self.base_price} -" \
+               f" {self.final_price} -" \
+               f" {self.final_price} -" \
+               f" {self.manufacturing_country} "
 
 
 class InvoiceItem(models.Model):
-    invoice = models.ForeignKey(to=Invoice, on_delete=models.CASCADE)
+    invoice = models.ForeignKey(to=Invoice, related_name='invoice_items', on_delete=models.CASCADE)
     item = models.ForeignKey(to=Item, on_delete=models.CASCADE)
     registration_date = models.DateField(null=False, default=datetime.now)
 
     def __str__(self):
-        return f"{self.invoice} - {self.item} - {self.registration_date}"
+        return str(self.item)
 
