@@ -129,7 +129,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
-
 # LOGGING = {
 #     "version": 1,
 #     "disable_existing_loggers": False,
