@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from core.models import Item, Invoice, InvoiceType, Country
+from core.models import Item, Invoice, InvoiceType, Country, InvoiceChangeLog
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -54,6 +54,30 @@ class WriteInvoiceSerializer(serializers.ModelSerializer):
         for i in user_owns_items_only:
             invoice.items.add(i.id)
         return invoice
+
+    def update(self, instance, validated_data):
+        icl = InvoiceChangeLog.objects.create(
+            base_invoice=instance,
+            last_user=instance.user,
+            last_type=instance.type,
+            last_description=instance.description,
+            last_date=instance.date,
+            last_registration_date=instance.registration_date
+        )
+        for i in instance.items.all():
+            icl.last_items.add(i.id)
+        icl.save()
+
+        instance.description = validated_data.get('description', instance.description)
+        instance.type = validated_data.get('type', instance.type)
+        instance.date = validated_data.get('date', instance.date)
+        instance.items.clear()
+
+        items = validated_data.pop("items")
+        user_owns_items_only = list(filter(lambda x: x.user == self.context["request"].user, items))
+        for i in user_owns_items_only:
+            instance.items.add(i.id)
+        return instance
 
 
 class ReadInvoiceSerializer(serializers.ModelSerializer):
