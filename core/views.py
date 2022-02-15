@@ -1,6 +1,9 @@
+from django.contrib.auth.models import User
 from rest_framework.response import Response
 
-from core.serializers import ReadItemSerializer, WriteItemSerializer, ReadInvoiceSerializer , WriteInvoiceSerializer
+from rest_framework.decorators import api_view, permission_classes
+from core.serializers import ReadItemSerializer, WriteItemSerializer, ReadInvoiceSerializer, WriteInvoiceSerializer, \
+    UserSerializer, UserInfoSerializer
 # from core.permissions import IsInCanViewItems
 from rest_framework.permissions import IsAuthenticated
 from core.models import Item, Invoice
@@ -8,6 +11,15 @@ from rest_framework import viewsets
 # import logging
 
 # logger = logging.getLogger(__file__)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_info(request):
+    if request.method == 'GET':
+        transformer = User.objects.filter(username=request.user.username)
+        serializer = UserInfoSerializer(transformer, many=True)
+        return Response(serializer.data)
 
 
 class ItemViewSet(viewsets.ModelViewSet):

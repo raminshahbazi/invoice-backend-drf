@@ -4,6 +4,13 @@ from rest_framework import serializers
 from core.models import Item, Invoice, InvoiceType, Country, InvoiceChangeLog
 
 
+# todo: consider combine UserInfoSerializer and UserSerializer together
+class UserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("username", "first_name", "last_name", "email")
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
