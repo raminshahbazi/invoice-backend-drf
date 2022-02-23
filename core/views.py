@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 
 from rest_framework.decorators import api_view, permission_classes
@@ -36,6 +37,8 @@ class ItemViewSet(viewsets.ModelViewSet):
 
 class InvoiceViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['date', 'items', 'type', 'description', 'registration_date']
     
     def get_serializer_class(self):
         if self.action in ("list", "retrieve"):
